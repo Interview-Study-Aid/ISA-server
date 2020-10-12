@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Interview-Study-Aid/ISA-server#readme",
   "dependencies": {
     "aws-sdk": "^2.771.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "heroku-logger": "^0.3.3",

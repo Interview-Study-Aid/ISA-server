@@ -12,8 +12,7 @@ router.get('/categories', async (req, res, next) => {
 
 router.get('/categories/:name', async (req, res, next) => {
     let info = await getByCategory(req.params.name);
-    console.log(req.params.name, 'reqqqqqqqqqqqqqq')
-    console.log(info, 'hfhfhfhfhfhf')
+  // console.log(JSON.parse(info[0].questionAnswer), "ccccc")
     res.status(200).json(info);
 })
 
