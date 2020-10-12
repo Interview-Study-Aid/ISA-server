@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+require('dotenv').config();
 const logger = require('heroku-logger')
 // const bcrypt = require('bcrypt');
 // const base64 = require('base-64');
