@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const logger = require('heroku-logger')
 // const bcrypt = require('bcrypt');
 // const base64 = require('base-64');
 // const jwt = require('jsonwebtoken');
@@ -21,6 +22,7 @@ module.exports = {
     server:app,
     start: port =>{
         const PORT = port || process.env.PORT || 3000;
-        app.listen(PORT,  () => console.log(`Listening on ${PORT}`));
+        app.listen(PORT,  () => 
+        logger.info(`Listening on ${PORT}`));
     }
 }
