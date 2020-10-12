@@ -68,13 +68,13 @@ let createQuestionTable = async () => {
         AttributeDefinitions: [
             { AttributeName: "id", AttributeType: "S" },
             { AttributeName: "questionAnswer", AttributeType: "S" },
-            { AttributeName: "caregory", AttributeType: "S" },  //Sort key
+            { AttributeName: "category", AttributeType: "S" }, //Sort key
         ],
         GlobalSecondaryIndexes: [{
-            IndexName: "caregoryIndex",
+            IndexName: "categoryIndex",
             KeySchema: [
                 {
-                    AttributeName: "caregory",
+                    AttributeName: "category",
                     KeyType: "HASH"
                 },
                 {

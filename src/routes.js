@@ -2,11 +2,18 @@
 
 const express = require('express');
 const router = express.Router();
-const getAllQuestions = require('../util/qs.js');
-const {createUser} = require('../util/user.js')
+const {getAllQuestions, getByCategory} = require('../util/qs.js');
+const {createUser} = require('../util/user.js');
 
 router.get('/categories', async (req, res, next) => {
     let info = await getAllQuestions();
+    res.status(200).json(info);
+})
+
+router.get('/categories/:name', async (req, res, next) => {
+    let info = await getByCategory(req.params.name);
+    console.log(req.params.name, 'reqqqqqqqqqqqqqq')
+    console.log(info, 'hfhfhfhfhfhf')
     res.status(200).json(info);
 })
 
