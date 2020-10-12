@@ -27,7 +27,7 @@ const getByCategory = async(name) =>{
     let result =  await getAllQuestions();
     // console.log(result)
 
-    return result.filter(item => item.category !== name);
+    return result.filter(item => item.category === name);
 }
 
 module.exports = {
