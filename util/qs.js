@@ -5,7 +5,7 @@ AWS.config.update({region: "us-east-1"});
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
-const habdleGet = async () => {
+const getAllQuestions = async () => {
     var params = {
         TableName : "QuestionTable",
         Select: "ALL_ATTRIBUTES"
@@ -22,5 +22,16 @@ const habdleGet = async () => {
     return scanResults;
 }
 
-module.exports = habdleGet;
+const getByCategory = async(name) =>{
+    
+    let result =  await getAllQuestions();
+    // console.log(result)
+
+    return result.filter(item => item.category !== name);
+}
+
+module.exports = {
+    getAllQuestions:getAllQuestions,
+    getByCategory:getByCategory
+}
 
