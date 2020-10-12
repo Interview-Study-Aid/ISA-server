@@ -62,7 +62,8 @@ let createQuestionTable = async () => {
     var params = {
         TableName : QUESTIONS_TABLE_NAME,
         KeySchema: [
-            { AttributeName: "id", KeyType: "HASH"}  //Partition key
+            { AttributeName: "id", KeyType: "HASH"},  //Partition key
+            { AttributeName: "questionAnswer", KeyType: "RANGE" },
         ],
         AttributeDefinitions: [
             { AttributeName: "id", AttributeType: "S" },
@@ -109,7 +110,4 @@ let setupAllTables = async () => {
       });
     }
 
-// module.exports = setupAllTables;
-
-
-setupAllTables();
+module.exports = setupAllTables;

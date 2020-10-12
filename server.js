@@ -4,7 +4,7 @@ const express = require('express');
 // const bcrypt = require('bcrypt');
 // const base64 = require('base-64');
 // const jwt = require('jsonwebtoken');
-// const route = require('./src/auth/routes.js')
+const route = require('./src/routes.js')
 
 
 
@@ -13,7 +13,7 @@ const app = express();
 
 // App Level MW
 app.use(express.json());
-// app.use(route);
+app.use(route);
 
 
 

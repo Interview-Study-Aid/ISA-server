@@ -1,17 +1,7 @@
-import { TABLE_NAME } from './constant.js';
-import {createTable} from './table.js'
-
 var AWS = require("aws-sdk");
-
-AWS.config.update({
-  region: "us-west-2",
-  endpoint: "http://localhost:8000"
-});
-
-
-// perform table creaetion
-createTable();
-
+var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
+AWS.config.credentials = credentials;
+AWS.config.update({region: "us-east-1"});
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
