@@ -1,8 +1,10 @@
 'use strict';
 
+const cors = require('cors');
 const express = require('express');
 require('dotenv').config();
 const logger = require('heroku-logger')
+
 // const bcrypt = require('bcrypt');
 // const base64 = require('base-64');
 // const jwt = require('jsonwebtoken');
@@ -15,6 +17,7 @@ const app = express();
 
 // App Level MW
 app.use(express.json());
+app.use(cors());
 app.use(route);
 
 
