@@ -1,15 +1,20 @@
 const USER_TABLE_NAME = "UserTable";
 const QUESTIONS_TABLE_NAME = "QuestionTable";
 const NOTES_TABLE_NAME = "NotesTable";
-
+require('dotenv').config()
 var AWS = require("aws-sdk");
-var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
-AWS.config.credentials = credentials;
+// var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
+// AWS.config.credentials = credentials;
 AWS.config.update({region: "us-east-1"});
 
 
+const aws = require('aws-sdk');
 
-var dynamodb = new AWS.DynamoDB();
+
+var dynamodb = new AWS.DynamoDB({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  });
 
 
 
