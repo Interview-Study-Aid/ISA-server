@@ -29,18 +29,26 @@ router.post('/signup', async (req, res, next) => {
 
 //  checking userName and password 
 router.get('/login', async (req, res, next) => {
-
+      console.log(req.headers.authorization, 'header auth')
     if (!req.headers.authorization) { next({'message': 'Invalid User ID/Password', 'status': 401, 'statusMessage': 'Unauthorized'}); return; }
     
     let basic = req.headers.authorization.split(' ').pop();
+
+    // console.log(basic, 'baaaasic')
         
     let [userName, pass] = base64.decode(basic).split(':');
+
+    // console.log(userName, pass, 'here is pass an name')
     
     let user  = await getUser(userName, pass);
+
+    // console.log(user, 'useeeeer')
     if(!user) {
          next({'message': 'Invalid User ID/Password', 'status': 401, 'statusMessage': 'Unauthorized'});
     } else{
         const token = generateAccessToken(user);
+
+    // console.log(token, 'toooken')
         res.status(200).json({user, token});
     }
 })
@@ -53,21 +61,8 @@ function generateAccessToken(username) {
 
 // gets user from token and saves notes
 router.post('/addNote', async (req, res, next) => {
-    if(!req.body.jwt) {
-        next({'message': 'Token not inclided', 'status': 401, 'statusMessage': 'Unauthorized'});
-    }
-
-    let userFromToken = decodeAccessToken(req.body.jwt).Item;
-    console.log(userFromToken, "userfrom jwt");
-
-    let savedNote = addNote(userFromToken.userName, req.body.notes)
-    res.status(200).json(savedNote);
 
 })
-
-function decodeAccessToken(token) {
-    return jwt.verify(token, process.env.TOKEN_SECRET);
-}
 
 
 

@@ -34,23 +34,24 @@ const addNote = (userId, notes) => {
 const getNotes = async (userName, userPassword) => {
     console.log("looking for ", userName, userPassword);
     var params = {
-        TableName: "NotesTable",
-        Key: {
-            "userName": userName, 
-            "userPassword": userPassword
-        }, 
-    };
+        TableName: "NotesTable"}
+    //     Key: {
+    //         "userName": userName, 
+    //         "userPassword": userPassword
+    //     }, 
+    // };
 
-    let user = await docClient.get(params, function(err, data) {
-        if (err) {
-            return null
-        } else {
-            return data.item;
-        }
-    }).promise();
+    // let user = await docClient.get(params, function(err, data) {
+    //     if (err) {
+    //         return null
+    //     } else {
+    //         return data.item;
+    //     }
+    // }).promise();
 
-    return Object.keys(user).length === 0 ? null : user;
+    // return Object.keys(user).length === 0 ? null : user;
 }
+
 
 module.exports= {
     getNotes:getNotes,
