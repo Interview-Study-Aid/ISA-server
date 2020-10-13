@@ -1,4 +1,5 @@
 var AWS = require("aws-sdk");
+const { use } = require("../src/routes");
 require('dotenv').config();
 // var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
 // AWS.config.credentials = credentials;
@@ -9,7 +10,7 @@ var docClient = new AWS.DynamoDB.DocumentClient({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
   })
 
-const handleCreate = (userName, userPassword) => {
+const createUser = (userName, userPassword) => {
     var params = {
         TableName: "UserTable",
         Item:{
@@ -30,27 +31,28 @@ const handleCreate = (userName, userPassword) => {
     return {userName, userPassword};
 }
 
-const handleGet = (userName) => {
+const getUser = async (userName, userPassword) => {
+    console.log("looking for ", userName, userPassword);
     var params = {
         TableName: "UserTable",
-        Key:{
-            "userName": userName
-        }
+        Key: {
+            "userName": userName, 
+            "userPassword": userPassword
+        }, 
     };
 
-    docClient.get(params, function(err, data) {
+    let user = await docClient.get(params, function(err, data) {
         if (err) {
-            console.error("Unable to read item. Error JSON:", JSON.stringify(err, null, 2));
+            return null
         } else {
-            return data;
+            return data.item;
         }
-    });
+    }).promise();
+
+    return Object.keys(user).length === 0 ? null : user;
 }
 
-
-
-
 module.exports = {
-    createUser:handleCreate,
-    handleGet:handleGet
+    createUser:createUser,
+    getUser:getUser
 }
