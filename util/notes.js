@@ -10,51 +10,74 @@ var docClient = new AWS.DynamoDB.DocumentClient({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
   })
 
-const addNote = (userId, notes) => {
+const addNote = async (userId, note) => {
+       
     var params = {
         TableName: "NotesTable",
         Item:{
             "userId": userId,
-            "notes": notes
+            "questionId": note.questionId,
+            "note": note.note
+        }
+    };
+    await docClient.put(params, function(err, data) {
+        if (err) {
+            console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
+        }
+    });
+    return note;
+}
+
+const getNotes = async (userId) => {
+    console.log("looking for ", userId);
+    var params = {
+        TableName: "NotesTable",
+        KeyConditionExpression: "#id = :id",
+        ExpressionAttributeNames:{
+            "#id": "userId"
+        },
+        ExpressionAttributeValues: {
+            ":id": userId
         }
     };
 
-    console.log("Adding a new note...");
-    docClient.put(params, function(err, data) {
+    let notes = await docClient.query(params, function(err, data) {
+        if (err) {
+            console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+        } else {
+            return data;
+        }
+    }).promise();
+    console.log(notes.Items, 'found ')
+    return notes.Items;
+}
+
+
+const updateNote = async (userId, note) => {
+       
+    var params = {
+        TableName: "NotesTable",
+        Key:{
+            "userId": userId,
+            "questionId": note.questionId
+        },
+        UpdateExpression: "set note = :r",
+        ExpressionAttributeValues:{
+            ":r": note.note
+        }
+    };
+    await docClient.update(params, function(err, data) {
         if (err) {
             console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
-        } else {
-            console.log("Added note", JSON.stringify(data, null, 2));
         }
     });
-
-    return notes;
+    return note;
 }
 
-const getNotes = async (userName, userPassword) => {
-    console.log("looking for ", userName, userPassword);
-    var params = {
-        TableName: "NotesTable"}
-    //     Key: {
-    //         "userName": userName, 
-    //         "userPassword": userPassword
-    //     }, 
-    // };
-
-    // let user = await docClient.get(params, function(err, data) {
-    //     if (err) {
-    //         return null
-    //     } else {
-    //         return data.item;
-    //     }
-    // }).promise();
-
-    // return Object.keys(user).length === 0 ? null : user;
-}
 
 
 module.exports= {
     getNotes:getNotes,
-    addNote:addNote
-
+    addNote:addNote,
+    updateNote:updateNote
 }
