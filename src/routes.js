@@ -25,31 +25,29 @@ router.get('/categories/:name', async (req, res, next) => {
 
 // for signup user (save userName + password ) 
 router.post('/signup', async (req, res, next) => {
-    console.log(req.body, 'body fro dignup')
-    let encryptedName = sha256.hex(req.body.userName);
-
+   
     let encryptedPassword = sha256.hex(req.body.userPassword); 
+    // console.log(req.body.userName, 'body fro dignup')
         
-    let user = await createUser(encryptedName, encryptedPassword);
+    let user = await createUser(req.body.userName, encryptedPassword);
     res.status(200).json(user);
 })
 
 //  checking userName and password 
 router.get('/login', async (req, res, next) => {
-    console.log(req.headers, 'header auth')
+   
     if (!req.headers.authorization) { next({'message': 'Invalid User ID/Password', 'status': 401, 'statusMessage': 'Unauthorized'}); return; }
     
     let basic = req.headers.authorization.split(' ').pop();
         
     let [userName, pass] = basic.split(':');
 
-    let encryptedName = sha256.hex(userName);
-
     let encryptedPassword = sha256.hex(pass); 
-      
+    console.log(userName, 'login user name')
     
     
-    let user  = await getUser(encryptedName, encryptedPassword);
+    let user  = await getUser(user.Item.userName, encryptedPassword);
+    // console.log(user.Item.userName, 'useeeeeeeeeeeeeeeer')
 
     if(!user) {
          next({'message': 'Invalid User ID/Password', 'status': 401, 'statusMessage': 'Unauthorized'});
