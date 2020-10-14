@@ -70,21 +70,11 @@ function generateAccessToken(username) {
 // gets user from token and saves notes
 router.post('/addNote', async (req, res, next) => {
  
-    // if(!req.body.jwt) {
-    //     next({'message': 'Token not included', 'status': 401, 'statusMessage': 'Unauthorized'});
-    // }
-
-    // let userFromToken = decodeAccessToken(req.body.jwt).Item;
-    // console.log(userFromToken, "userfrom jwt");
-
-    // let savedNote = addNote(userFromToken.userName, req.body.notes)
-    // res.status(200).json(savedNote);
+  
 
 })
 
-// function decodeAccessToken(token) {
-//     return jwt.verify(token, process.env.TOKEN_SECRET);
-// }
+
 
 
 
