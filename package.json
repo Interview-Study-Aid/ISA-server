@@ -25,7 +25,6 @@
     "express": "^4.17.1",
     "heroku-logger": "^0.3.3",
     "js-sha256": "^0.9.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.10.9"
+    "jsonwebtoken": "^8.5.1"
   }
 }
