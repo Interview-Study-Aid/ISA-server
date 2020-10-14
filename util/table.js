@@ -52,11 +52,11 @@ let createNotesTable = async () => {
         TableName : NOTES_TABLE_NAME,
         KeySchema: [
             { AttributeName: "userId", KeyType: "HASH"},  //Partition key
-            { AttributeName: "notes", KeyType: "RANGE" }  //Sort key
+            { AttributeName: "questionId", KeyType: "RANGE" }  //Sort key
         ],
         AttributeDefinitions: [
             { AttributeName: "userId", AttributeType: "S" },
-            { AttributeName: "notes", AttributeType: "S" }
+            { AttributeName: "questionId", AttributeType: "S" }
         ],
         BillingMode: "PAY_PER_REQUEST"
     };
