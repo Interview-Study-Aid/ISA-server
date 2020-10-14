@@ -7,6 +7,8 @@ const {createUser, getUser} = require('../util/user.js');
 const {addNote} = require('../util/notes.js');
 const base64 = require('base-64');
 const jwt = require('jsonwebtoken');
+const sha256 = require('js-sha256');
+
 
 // for categories with all questions and answers
 router.get('/categories', async (req, res, next) => {
@@ -23,32 +25,36 @@ router.get('/categories/:name', async (req, res, next) => {
 
 // for signup user (save userName + password ) 
 router.post('/signup', async (req, res, next) => {
-    let user = await createUser(req.body.userName, req.body.userPassword);
+    console.log(req.body, 'body fro dignup')
+    let encryptedName = sha256.hex(req.body.userName);
+
+    let encryptedPassword = sha256.hex(req.body.userPassword); 
+        
+    let user = await createUser(encryptedName, encryptedPassword);
     res.status(200).json(user);
 })
 
 //  checking userName and password 
 router.get('/login', async (req, res, next) => {
-      console.log(req.headers.authorization, 'header auth')
+    console.log(req.headers, 'header auth')
     if (!req.headers.authorization) { next({'message': 'Invalid User ID/Password', 'status': 401, 'statusMessage': 'Unauthorized'}); return; }
     
     let basic = req.headers.authorization.split(' ').pop();
-
-    // console.log(basic, 'baaaasic')
         
-    let [userName, pass] = base64.decode(basic).split(':');
+    let [userName, pass] = basic.split(':');
 
-    // console.log(userName, pass, 'here is pass an name')
+    let encryptedName = sha256.hex(userName);
+
+    let encryptedPassword = sha256.hex(pass); 
+      
     
-    let user  = await getUser(userName, pass);
+    
+    let user  = await getUser(encryptedName, encryptedPassword);
 
-    // console.log(user, 'useeeeer')
     if(!user) {
          next({'message': 'Invalid User ID/Password', 'status': 401, 'statusMessage': 'Unauthorized'});
     } else{
         const token = generateAccessToken(user);
-
-    // console.log(token, 'toooken')
         res.status(200).json({user, token});
     }
 })
@@ -59,10 +65,28 @@ function generateAccessToken(username) {
 }
 
 
+
+
 // gets user from token and saves notes
 router.post('/addNote', async (req, res, next) => {
+ 
+    // if(!req.body.jwt) {
+    //     next({'message': 'Token not included', 'status': 401, 'statusMessage': 'Unauthorized'});
+    // }
+
+    // let userFromToken = decodeAccessToken(req.body.jwt).Item;
+    // console.log(userFromToken, "userfrom jwt");
+
+    // let savedNote = addNote(userFromToken.userName, req.body.notes)
+    // res.status(200).json(savedNote);
 
 })
+
+// function decodeAccessToken(token) {
+//     return jwt.verify(token, process.env.TOKEN_SECRET);
+// }
+
+
 
 
 
