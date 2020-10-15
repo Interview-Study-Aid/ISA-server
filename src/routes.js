@@ -79,7 +79,7 @@ router.post('/addNote', async (req, res, next) => {
     }
 
     let userFromToken = decodeAccessToken(req.body.jwt).Item;
-    console.log(userFromToken, "userfrom jwt");
+    // console.log(userFromToken, "userfrom jwt");
 
     let savedNote = await addNote(userFromToken.userName, JSON.parse(req.body.notes))
     res.status(200).json(savedNote);
@@ -92,21 +92,22 @@ router.post('/updateNote', async (req, res, next) => {
     }
 
     let userFromToken = decodeAccessToken(req.body.jwt).Item;
-    console.log(userFromToken, "userfrom jwt");
+    // console.log(userFromToken, "userfrom jwt");
 
     let savedNote = await updateNote(userFromToken.userName, JSON.parse(req.body.notes))
     res.status(200).json(savedNote);
 })
 
     // get all notes
-router.get('/notes', async (req, res, next) => {
+router.get('/notes/:jwt', async (req, res, next) => {
+    console.log('here I am', req.params.jwt)
 
-    if(!req.body.jwt) {
+    if(!req.params.jwt) {
         next({'message': 'Token not inclided', 'status': 401, 'statusMessage': 'Unauthorized'});
     }
 
-    let userFromToken = decodeAccessToken(req.body.jwt).Item;
-    // console.log(userFromToken, "userfrom jwt");
+    let userFromToken = decodeAccessToken(req.params.jwt).Item;
+    console.log(userFromToken, "userfrom jwt");
 
     let notes = await getNotes(userFromToken.userName)
     res.status(200).json(notes);
