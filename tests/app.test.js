@@ -12,15 +12,43 @@ const config = {
 
 const ddb = new DocumentClient(config);
 
-it('should insert item into table', async () => {
+/////////////////////////
+it('should insert user and get him from user table', async () => {
     await ddb
-      .put({TableName: 'files', Item: {id: '1', hello: 'world'}})
+      .put({TableName: 'UserTable', Item: {userName: 'userName', userPassword: 'userPassword'}})
       .promise();
+    const res = await ddb.get({TableName: 'UserTable', Key: {userName: 'userName',userPassword: 'userPassword'}}).promise();
   
-    const {Item} = await ddb.get({TableName: 'files', Key: {id: '1'}}).promise();
-  
-    expect(Item).toEqual({
-      id: '1',
-      hello: 'world',
+    expect(res.Item).toEqual({
+        userName: 'userName',
+      userPassword: 'userPassword',
     });
   });
+
+////////////////////////////////////
+  it('should insert item into notes table', async () => {
+    await ddb
+      .put({TableName: 'NotesTable', Item:{
+         userId:"userId",
+        questionId: "questionID",
+        note: "note"
+    }})
+      .promise();
+    //   console.log('hereeeeeeeeeeeeeeeeeeeeee')
+    // const res = await ddb.query( {TableName: "NotesTable",
+    //     KeyConditionExpression: "#id = :id",
+    //     ExpressionAttributeNames:{
+    //         "#id": "userId"
+    //     },
+    //     ExpressionAttributeValues: {
+    //         userId: "userId",
+    //     }}).promise();
+
+
+    console.log(res)
+  
+    // expect(res.note).toEqual({
+    //     note: "note",
+    // });
+  });
+
