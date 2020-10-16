@@ -12,7 +12,6 @@ const config = {
 
 const ddb = new DocumentClient(config);
 
-/////////////////////////
 it('should insert user and get him from user table', async () => {
     await ddb
       .put({TableName: 'UserTable', Item: {userName: 'userName', userPassword: 'userPassword'}})
@@ -25,8 +24,8 @@ it('should insert user and get him from user table', async () => {
     });
   });
 
-////////////////////////////////////
-  it('should insert item into notes table', async () => {
+
+  it('should insert note into notes table and get it back', async () => {
     await ddb
       .put({TableName: 'NotesTable', Item:{
          userId:"userId",
@@ -34,21 +33,51 @@ it('should insert user and get him from user table', async () => {
         note: "note"
     }})
       .promise();
-    //   console.log('hereeeeeeeeeeeeeeeeeeeeee')
-    // const res = await ddb.query( {TableName: "NotesTable",
-    //     KeyConditionExpression: "#id = :id",
-    //     ExpressionAttributeNames:{
-    //         "#id": "userId"
-    //     },
-    //     ExpressionAttributeValues: {
-    //         userId: "userId",
-    //     }}).promise();
-
-
-    console.log(res)
+ 
+    const res = await ddb.query( {TableName: "NotesTable",
+        KeyConditionExpression: "#id = :id",
+        ExpressionAttributeNames:{
+            "#id": "userId"
+        },
+        ExpressionAttributeValues: {
+            ":id": "userId",
+        }}).promise();
   
-    // expect(res.note).toEqual({
-    //     note: "note",
-    // });
+    expect(res.Items[0].note).toEqual("note");
   });
+
+  it('should change note if user updated it', async () => {
+    await ddb
+    .put({TableName: 'NotesTable', Item:{
+      userId:"userId",
+      questionId: "questionID",
+      note: "note"
+  }})
+    .promise();
+
+    await ddb
+      .update({TableName: "NotesTable",
+      Key:{
+        userId:"userId",
+        questionId: "questionID",
+      },
+      UpdateExpression: "set note = :r",
+      ExpressionAttributeValues:{
+          ":r": "updated note"
+      }})
+      .promise();
+
+      const res = await ddb.query( {TableName: "NotesTable",
+      KeyConditionExpression: "#id = :id",
+      ExpressionAttributeNames:{
+          "#id": "userId"
+      },
+      ExpressionAttributeValues: {
+          ":id": "userId",
+      }}).promise();
+
+  
+    expect(res.Items[0].note).toEqual("updated note");
+  });
+
 
